@@ -198,8 +198,7 @@ int main()
 #ifdef DEBUG_INTEL
     cv::Mat img = cv::imread("../../test_images/tomo.jpg");
 #else
-    //cv::Mat img = cv::imread("../../test_images/tomo.jpg");
-    cv::Mat img = cv::imread("../../test_images/GaussianScaleSpace_TrissFullResolution.jpg");
+    cv::Mat img = cv::imread("GaussianScaleSpace_TrissFullResolution.jpg");
 #endif
     
     cv::Mat imgGray;
