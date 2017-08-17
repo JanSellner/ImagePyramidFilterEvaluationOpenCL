@@ -1,5 +1,5 @@
 # ImagePyramidFilterEvaluationOpenCL
-Evaluation of different filter operation and different image types (image, cube, buffer) in OpenCL.
+Evaluation of different filter operations and different image types (image, cube, buffer) in OpenCL. This is the repository for a corresponding [blog article](https://milania.de/blog/Performance_evaluation_of_image_convolution_with_gradient_filters_in_OpenCL) about performance evaluation of filters in OpenCL.
 
 # Build instruction
 - Install Visual Studio 2015
