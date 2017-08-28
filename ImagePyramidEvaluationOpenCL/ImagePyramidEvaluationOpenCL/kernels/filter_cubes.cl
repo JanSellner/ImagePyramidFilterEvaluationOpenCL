@@ -3,28 +3,44 @@
 #define BORDER_REPLICATE 1   //!< `aaaaaa|abcdefgh|hhhhhhh`
 #define BORDER_REFLECT_101 4 //!< `gfedcb|abcdefgh|gfedcba`
 
+/**
+ * Calculates the adjusted border coordinated based on the border type.
+ */
 int4 borderCoordinate(int4 coord, int rows, int cols, int border)
 {
     int4 coordAdjusted = coord;
 
     if (border == BORDER_REFLECT_101)
     {
+        // Consider the following 1D example
+        // -2 -1 | 0 1 2 3 | 4 5
+        // cols = 4
+
+        // Left
         if (coord.x < 0)
         {
-            coordAdjusted.x = abs(coord.x); // -1 --> 1
+            coordAdjusted.x = abs(coord.x); // |-1| --> 1
         }
+
+        // Top
         if (coord.y < 0)
         {
             coordAdjusted.y = abs(coord.y);
         }
+        
+        // Right
         if (coord.x >= cols)
         {
-            // 8 --> 6
-            coordAdjusted.x = cols - (coord.x - cols);
+            // 5 --> 1
+            // coord.x - cols + 1 = 5 - 4 + 1 = 2   (= how far passed the coordinate the border?)
+            // cols - (coord.x - cols + 1) - 1 = 4 - 2 - 1 = 1
+            coordAdjusted.x = cols - (coord.x - cols + 1) - 1;  // -1 since the last value is not repeated
         }
+
+        // Bottom
         if (coord.y >= rows)
         {
-            coordAdjusted.y = rows - (coord.y - rows);
+            coordAdjusted.y = rows - (coord.y - rows + 1) - 1;
         }
     }
     // BORDER_REPLICATE is the default setting of the used sampler
