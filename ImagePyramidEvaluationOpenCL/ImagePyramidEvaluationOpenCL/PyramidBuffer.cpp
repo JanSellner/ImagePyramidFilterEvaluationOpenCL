@@ -56,21 +56,12 @@ long long PyramidBuffer::startFilterTest()
         case SINGLE:
             calcDerivativesSingle();
             break;
-        //case DOUBLE:
-        //    calcDerivativesDouble();
-        //    break;
-        //case DOUBLE_SEPARATION:
-        //    calcDerivativesDoubleSeparation();
-        //    break;
         case SINGLE_LOCAL:
             calcDerivativesSingleLocal();
             break;
         case SINGLE_SEPARATION_LOCAL:
             calcDerivativesSingleSeparationLocal();
             break;
-        //case SINGLE_LOCAL_UNROLL:
-        //    calcDerivativesSingleLocalUnroll();
-        //    break;
         default:
             break;
     }

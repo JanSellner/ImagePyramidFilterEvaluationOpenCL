@@ -146,43 +146,6 @@ float filter_sum_local(read_only image2d_array_t imgIn,
     return sum;
 }
 
-float2 filter_sum_double(read_only image2d_array_t imgIn,
-                         constant float* filterKernel1,
-                         constant float* filterKernel2,
-                         const int filterRows,
-                         const int filterRowsHalf,
-                         const int filterCols,
-                         const int filterColsHalf,
-                         const int4 coord0,
-                         const int border)
-{
-    const int rows = get_image_height(imgIn);
-    const int cols = get_image_width(imgIn);
-
-    float sum1 = 0.0f;
-    float sum2 = 0.0f;
-    int4 coord;
-    coord.z = coord0.z;
-
-    // Image patch is row-wise accessed
-    for (int y = -filterRowsHalf; y <= filterRowsHalf; ++y)
-    {
-        coord.y = coord0.y + y;
-        for (int x = -filterColsHalf; x <= filterColsHalf; ++x)
-        {
-            coord.x = coord0.x + x;
-            const int4 coordBorder = borderCoordinate(coord, rows, cols, border);
-            float color = read_imagef(imgIn, sampler, coordBorder).x;
-
-            const int idx = (y + filterRowsHalf) * filterCols + x + filterColsHalf;
-            sum1 += color * filterKernel1[idx];
-            sum2 += color * filterKernel2[idx];
-        }
-    }
-
-    return (float2)(sum1, sum2);
-}
-
 /**
  * @brief Convolution for one filter.
  */
@@ -216,25 +179,6 @@ kernel void filter_single_local(read_only image2d_array_t imgIn,
     float sum = filter_sum_local(imgIn, filterKernel, filterRows, filterRowsHalf, filterCols, filterColsHalf, coord0, border);
 
     write_imagef(imgOut, coord0, sum);
-}
-
-kernel void filter_double(read_only image2d_array_t imgIn,
-                          write_only image2d_array_t imgOut1,
-                          write_only image2d_array_t imgOut2,
-                          constant float* filterKernel1,
-                          constant float* filterKernel2,
-                          const int filterRows,
-                          const int filterRowsHalf,
-                          const int filterCols,
-                          const int filterColsHalf,
-                          const int border)
-{
-    int4 coord0 = (int4)(get_global_id(0), get_global_id(1), get_global_id(2), 0);
-
-    float2 sum = filter_sum_double(imgIn, filterKernel1, filterKernel2, filterRows, filterRowsHalf, filterCols, filterColsHalf, coord0, border);
-
-    write_imagef(imgOut1, coord0, sum.x);
-    write_imagef(imgOut2, coord0, sum.y);
 }
 
 /**

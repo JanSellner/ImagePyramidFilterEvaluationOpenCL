@@ -56,12 +56,6 @@ long long PyramidCubes::startFilterTest()
         case SINGLE_LOCAL:
             calcDerivativesSingleLocal();
             break;
-        case DOUBLE:
-            calcDerivativesDouble();
-            break;
-        case DOUBLE_SEPARATION:
-            calcDerivativesDoubleSeparation();
-            break;
         default:
             break;
     }
@@ -92,11 +86,11 @@ void PyramidCubes::readImages()
         }
     }
 
-    cv::Mat imgOut;
-    cv::sepFilter2D(img[0], imgOut, CV_32FC1, Gx2, Gx1);
+    cv::Mat testGx;
+    cv::sepFilter2D(img[0], testGx, CV_32FC1, Gx2, Gx1);
 
-    cv::Mat imgOut2;
-    cv::filter2D(img[0], imgOut2, CV_32FC1, Gy);
+    cv::Mat testGy;
+    cv::filter2D(img[0], testGy, CV_32FC1, Gy);
 }
 
 std::string PyramidCubes::name()
@@ -198,31 +192,5 @@ void PyramidCubes::calcDerivativesSingleLocal()
     {
         kernelFilter.runSingleLocal(*images[i], imagesGx[i]);
         kernelFilter2.runSingleLocal(*images[i], imagesGy[i]);
-    }
-}
-
-void PyramidCubes::calcDerivativesDouble()
-{
-    kernelFilter.setKernel1(Gx);
-    kernelFilter.setKernel2(Gy);
-
-    kernelFilter.setBorder(cv::BORDER_DEFAULT);
-
-    for (size_t i = 0; i < images.size(); ++i)
-    {
-        kernelFilter.runDouble(*images[i], imagesGx[i], imagesGy[i]);
-    }
-}
-
-void PyramidCubes::calcDerivativesDoubleSeparation()
-{
-    kernelFilter.setKernelSeparation1(Gx1, Gx2);
-    kernelFilter.setKernelSeparation2(Gy1, Gy2);
-
-    kernelFilter.setBorder(cv::BORDER_DEFAULT);
-
-    for (size_t i = 0; i < images.size(); ++i)
-    {
-        kernelFilter.rundDoubleSeparation(*images[i], imagesGx[i], imagesGy[i]);
     }
 }

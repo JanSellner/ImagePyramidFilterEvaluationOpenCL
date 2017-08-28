@@ -19,8 +19,6 @@ private:
     void calcDerivativesSingleSeparation();
     void calcDerivativesSingle();
     void calcDerivativesSingleLocal();
-    void calcDerivativesDouble();
-    void calcDerivativesDoubleSeparation();
 
 private:
     cl::Program programFilter;
