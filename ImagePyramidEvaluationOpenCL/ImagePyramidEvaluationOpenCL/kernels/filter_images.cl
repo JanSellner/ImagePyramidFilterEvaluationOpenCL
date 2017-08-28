@@ -48,10 +48,6 @@ int2 borderCoordinate(int2 coord, int rows, int cols, int border)
     return coordAdjusted;
 }
 
-typedef float type_single;
-typedef float2 type_double;
-
-#include "filter_images_defines.cl"
 #include "filter_images_normal.cl"
 #include "filter_images_local.cl"
 #include "filter_images_predefined-normal.cl"

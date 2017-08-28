@@ -26,8 +26,4 @@ public:
     cl::Event runDoublePredefinedLocal(const cl::Image2D& img, SPImage2D& imgDst1, SPImage2D& imgDst2, const std::string& name, const std::string& size);
 
     cl::Event runHalfsampleImage(const cl::Image2D& imgSrc, SPImage2D& imgDst);
-
-private:
-    bool useUnrollFilter(int rows, int cols) const;
-    bool useUnrollFilter(int rows1, int cols1, int rows2, int cols2) const;
 };

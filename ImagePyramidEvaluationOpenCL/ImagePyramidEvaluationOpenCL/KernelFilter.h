@@ -2,6 +2,7 @@
 
 #include "AKernel.h"
 #include "general.h"
+#include "settings.h"
 
 template<class Derived>
 class KernelFilter : public AKernel<Derived>
@@ -111,6 +112,29 @@ public:
         cl::Event eventBuffer;
         queue->enqueueWriteBuffer(bufferLookupKernelDouble, CL_NON_BLOCKING, 0, sizeof(Lookup) *  this->lookupKernelDoubleComplete.size(), this->lookupKernelDoubleComplete.data(), nullptr, &eventBuffer);
         events.push_back(eventBuffer);
+    }
+
+protected:
+    bool useUnrollFilter(int rows, int cols) const
+    {
+        return unroll && (
+            rows == 3 && cols == 3 ||
+            rows == 5 && cols == 5 ||
+            rows == 7 && cols == 7 ||
+            rows == 9 && cols == 9);
+    }
+
+    bool useUnrollFilter(int rows1, int cols1, int rows2, int cols2) const
+    {
+        return unroll && (
+            (rows1 == 1 && cols1 == 3 && rows2 == 3 && cols2 == 1) ||
+            (rows1 == 3 && cols1 == 1 && rows2 == 1 && cols2 == 3) ||
+            (rows1 == 1 && cols1 == 5 && rows2 == 5 && cols2 == 1) ||
+            (rows1 == 5 && cols1 == 1 && rows2 == 1 && cols2 == 5) ||
+            (rows1 == 1 && cols1 == 7 && rows2 == 7 && cols2 == 1) ||
+            (rows1 == 7 && cols1 == 1 && rows2 == 1 && cols2 == 7) ||
+            (rows1 == 1 && cols1 == 9 && rows2 == 9 && cols2 == 1) ||
+            (rows1 == 9 && cols1 == 1 && rows2 == 1 && cols2 == 9));
     }
 
 private:

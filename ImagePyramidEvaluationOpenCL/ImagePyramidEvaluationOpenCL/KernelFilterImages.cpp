@@ -1,7 +1,6 @@
 #include "KernelFilterImages.h"
 #include "general.h"
 #include <numeric>
-#include "settings.h"
 
 KernelFilterImages::KernelFilterImages(AOpenCLInterface* const opencl, cl::Program* const program)
     : KernelFilter(opencl, program)
@@ -690,26 +689,4 @@ cl::Event KernelFilterImages::runHalfsampleImage(const cl::Image2D& imgSrc, SPIm
     events.clear();
 
     return event;
-}
-
-bool KernelFilterImages::useUnrollFilter(int rows, int cols) const
-{
-    return unroll && (
-        rows == 3 && cols == 3 ||
-        rows == 5 && cols == 5 ||
-        rows == 7 && cols == 7 ||
-        rows == 9 && cols == 9);
-}
-
-bool KernelFilterImages::useUnrollFilter(int rows1, int cols1, int rows2, int cols2) const
-{
-    return unroll && (
-        (rows1 == 1 && cols1 == 3 && rows2 == 3 && cols2 == 1) ||
-        (rows1 == 3 && cols1 == 1 && rows2 == 1 && cols2 == 3) ||
-        (rows1 == 1 && cols1 == 5 && rows2 == 5 && cols2 == 1) ||
-        (rows1 == 5 && cols1 == 1 && rows2 == 1 && cols2 == 5) ||
-        (rows1 == 1 && cols1 == 7 && rows2 == 7 && cols2 == 1) ||
-        (rows1 == 7 && cols1 == 1 && rows2 == 1 && cols2 == 7) ||
-        (rows1 == 1 && cols1 == 9 && rows2 == 9 && cols2 == 1) ||
-        (rows1 == 9 && cols1 == 1 && rows2 == 1 && cols2 == 9));
 }

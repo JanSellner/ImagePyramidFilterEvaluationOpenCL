@@ -34,4 +34,9 @@ void writeValue(float* img, constant struct Lookup* lookup, int level, int x, in
     img[lookup[level].previousPixels + lookup[level].imgWidth * y + x] = value;
 }
 
+typedef float type_single;
+typedef float2 type_double;
+
+#include "filter_images_defines.cl"
+
 #endif

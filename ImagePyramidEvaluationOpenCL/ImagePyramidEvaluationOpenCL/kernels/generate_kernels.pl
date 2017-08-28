@@ -20,6 +20,12 @@ generate_derivativeKernels("filter_images_normal.base.cl", "filter_images_predef
 generate_derivativeKernels("filter_images_local.base.cl", "filter_images_predefined-local.cl");    # Use only local
 #generate_derivativeKernels("filter_images_normal.base.cl", "filter_images_local.base.cl", "filter_images_optimum-predefined.cl");   # Use local memory for filter sizes > 3 x 3
 
+generate_filter("filter_cubes_normal.base.cl");
+generate_filter("filter_cubes_local.base.cl");
+
+generate_filter("filter_buffer_normal.base.cl");
+generate_filter("filter_buffer_local.base.cl");
+
 sub generate_defines
 {
     my $filenameBase = $_[0];
