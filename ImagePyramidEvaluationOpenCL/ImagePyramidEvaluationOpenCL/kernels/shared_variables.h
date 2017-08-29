@@ -23,6 +23,10 @@ float readValueC(constant float* img, constant struct Lookup* lookup, int level,
 {
     return img[lookup[level].previousPixels + lookup[level].imgWidth * y + x];
 }
+float readValue1D(read_only image1d_buffer_t img, constant struct Lookup* lookup, int level, int x, int y)
+{
+    return read_imagef(img, lookup[level].previousPixels + lookup[level].imgWidth * y + x).x;
+}
 
 //TODO: why is this overloading needed?
 //float* readAddress(float* img, constant struct Lookup* lookup, int level, int x, int y)
@@ -38,6 +42,11 @@ constant float* readAddress(constant float* img, constant struct Lookup* lookup,
 void writeValue(float* img, constant struct Lookup* lookup, int level, int x, int y, float value)
 {
     img[lookup[level].previousPixels + lookup[level].imgWidth * y + x] = value;
+}
+
+void writeValue1D(write_only image1d_buffer_t img, constant struct Lookup* lookup, int level, int x, int y, float value)
+{
+    write_imagef(img, lookup[level].previousPixels + lookup[level].imgWidth * y + x, value);
 }
 
 typedef float type_single;

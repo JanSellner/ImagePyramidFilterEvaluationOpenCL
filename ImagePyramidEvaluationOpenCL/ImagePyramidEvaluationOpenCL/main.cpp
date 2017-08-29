@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "utils.h"
 #include <iomanip>
+#include "PyramidImages1D.h"
 
 struct TestResults
 {
@@ -212,7 +213,8 @@ int main()
 
     //PyramidImages pyramid(imgGray);
     //PyramidCubes pyramid(imgGray);
-    PyramidBuffer pyramid(imgGray);
+    //PyramidBuffer pyramid(imgGray);
+    PyramidImages1D pyramid(imgGray);
 
     testBatch(pyramid);
     //test(pyramid);

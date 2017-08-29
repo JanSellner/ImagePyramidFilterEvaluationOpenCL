@@ -3,11 +3,11 @@
 #include "APyramid.h"
 #include "KernelFilterBuffer.h"
 
-class PyramidBuffer : public APyramid
+class PyramidImages1D : public APyramid
 {
 public:
-    explicit PyramidBuffer(const cv::Mat& img);
-    virtual ~PyramidBuffer();
+    explicit PyramidImages1D(const cv::Mat& img);
+    virtual ~PyramidImages1D();
 
     virtual void init() override;
     virtual long long startFilterTest() override;
@@ -15,7 +15,7 @@ public:
     virtual std::string name() override;
 
 private:
-    std::vector<cv::Mat> readImageStack(const cl::Buffer& images);
+    std::vector<cv::Mat> readImageStack(const cl::Image1DBuffer& images);
     void createPyramid();
     void calcDerivativesSingle();
     void calcDerivativesSingleLocal();
@@ -23,14 +23,17 @@ private:
 
 private:
     cl::Program programFilter;
-    KernelFilterBuffer<cl::Buffer> kernelFilter;
-    KernelFilterBuffer<cl::Buffer> kernelFilter2;
+    KernelFilterBuffer<cl::Image1DBuffer> kernelFilter;
+    KernelFilterBuffer<cl::Image1DBuffer> kernelFilter2;
     
     cl::Buffer bufferLocationLookup;
     std::vector<Lookup> locationLoopup;
     int totalPixels;
 
-    cl::Buffer images;
-    cl::Buffer imagesGx;
-    cl::Buffer imagesGy;
+    cl::Buffer bufferImages;
+    cl::Buffer bufferImagesGx;
+    cl::Buffer bufferImagesGy;
+    cl::Image1DBuffer image;
+    cl::Image1DBuffer imageGx;
+    cl::Image1DBuffer imageGy;
 };

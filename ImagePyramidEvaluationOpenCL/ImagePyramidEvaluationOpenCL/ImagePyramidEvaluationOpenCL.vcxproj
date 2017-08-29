@@ -126,7 +126,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="APyramid.cpp" />
-    <ClCompile Include="KernelFilterBuffer.cpp" />
     <ClCompile Include="KernelFilterCubes.cpp" />
     <ClCompile Include="KernelFilterImages.cpp" />
     <ClCompile Include="main.cpp" />
@@ -134,6 +133,7 @@
     <ClCompile Include="PyramidBuffer.cpp" />
     <ClCompile Include="PyramidCubes.cpp" />
     <ClCompile Include="PyramidImages.cpp" />
+    <ClCompile Include="PyramidImages1D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AKernel.h" />
@@ -149,12 +149,15 @@
     <ClInclude Include="PyramidBuffer.h" />
     <ClInclude Include="PyramidCubes.h" />
     <ClInclude Include="PyramidImages.h" />
+    <ClInclude Include="PyramidImages1D.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="kernels\filter_buffer.cl" />
     <None Include="kernels\filter_cubes.cl" />
+    <None Include="kernels\filter_image1D.cl" />
+    <None Include="kernels\filter_image1D_normal.cl" />
     <None Include="kernels\filter_images.cl" />
     <None Include="kernels\filter_images_defines.cl" />
     <None Include="kernels\filter_images_local.cl" />
