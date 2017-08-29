@@ -7,7 +7,7 @@
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single(global float* imgIn,
+type_single filter_sum_single(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int filterRowsHalf,
@@ -35,7 +35,7 @@ type_single filter_sum_single(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + filterRowsHalf) * filterCols + x + filterColsHalf;
             sum += color * filterKernel[idx];
@@ -57,7 +57,7 @@ type_single filter_sum_single(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2)
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single(global float* imgIn,
+kernel void filter_single(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -81,7 +81,7 @@ kernel void filter_single(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_3x3(global float* imgIn,
+type_single filter_sum_single_3x3(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -106,7 +106,7 @@ type_single filter_sum_single_3x3(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_3x3) * COLS_3x3 + x + COLS_HALF_3x3;
             sum += color * filterKernel[idx];
@@ -125,7 +125,7 @@ type_single filter_sum_single_3x3(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_3x3(global float* imgIn,
+kernel void filter_single_3x3(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -145,7 +145,7 @@ kernel void filter_single_3x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_5x5(global float* imgIn,
+type_single filter_sum_single_5x5(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -170,7 +170,7 @@ type_single filter_sum_single_5x5(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_5x5) * COLS_5x5 + x + COLS_HALF_5x5;
             sum += color * filterKernel[idx];
@@ -189,7 +189,7 @@ type_single filter_sum_single_5x5(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_5x5(global float* imgIn,
+kernel void filter_single_5x5(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -209,7 +209,7 @@ kernel void filter_single_5x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_7x7(global float* imgIn,
+type_single filter_sum_single_7x7(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -234,7 +234,7 @@ type_single filter_sum_single_7x7(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_7x7) * COLS_7x7 + x + COLS_HALF_7x7;
             sum += color * filterKernel[idx];
@@ -253,7 +253,7 @@ type_single filter_sum_single_7x7(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_7x7(global float* imgIn,
+kernel void filter_single_7x7(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -273,7 +273,7 @@ kernel void filter_single_7x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_9x9(global float* imgIn,
+type_single filter_sum_single_9x9(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -298,7 +298,7 @@ type_single filter_sum_single_9x9(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_9x9) * COLS_9x9 + x + COLS_HALF_9x9;
             sum += color * filterKernel[idx];
@@ -317,7 +317,7 @@ type_single filter_sum_single_9x9(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_9x9(global float* imgIn,
+kernel void filter_single_9x9(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -338,7 +338,7 @@ kernel void filter_single_9x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_1x3(global float* imgIn,
+type_single filter_sum_single_1x3(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -363,7 +363,7 @@ type_single filter_sum_single_1x3(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x3) * COLS_1x3 + x + COLS_HALF_1x3;
             sum += color * filterKernel[idx];
@@ -385,7 +385,7 @@ type_single filter_sum_single_1x3(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_1x3(global float* imgIn,
+kernel void filter_single_1x3(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -405,7 +405,7 @@ kernel void filter_single_1x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_1x5(global float* imgIn,
+type_single filter_sum_single_1x5(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -430,7 +430,7 @@ type_single filter_sum_single_1x5(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x5) * COLS_1x5 + x + COLS_HALF_1x5;
             sum += color * filterKernel[idx];
@@ -452,7 +452,7 @@ type_single filter_sum_single_1x5(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_1x5(global float* imgIn,
+kernel void filter_single_1x5(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -472,7 +472,7 @@ kernel void filter_single_1x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_1x7(global float* imgIn,
+type_single filter_sum_single_1x7(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -497,7 +497,7 @@ type_single filter_sum_single_1x7(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x7) * COLS_1x7 + x + COLS_HALF_1x7;
             sum += color * filterKernel[idx];
@@ -519,7 +519,7 @@ type_single filter_sum_single_1x7(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_1x7(global float* imgIn,
+kernel void filter_single_1x7(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -539,7 +539,7 @@ kernel void filter_single_1x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_1x9(global float* imgIn,
+type_single filter_sum_single_1x9(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -564,7 +564,7 @@ type_single filter_sum_single_1x9(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x9) * COLS_1x9 + x + COLS_HALF_1x9;
             sum += color * filterKernel[idx];
@@ -586,7 +586,7 @@ type_single filter_sum_single_1x9(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_1x9(global float* imgIn,
+kernel void filter_single_1x9(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -606,7 +606,7 @@ kernel void filter_single_1x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_3x1(global float* imgIn,
+type_single filter_sum_single_3x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -631,7 +631,7 @@ type_single filter_sum_single_3x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_3x1) * COLS_3x1 + x + COLS_HALF_3x1;
             sum += color * filterKernel[idx];
@@ -653,7 +653,7 @@ type_single filter_sum_single_3x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_3x1(global float* imgIn,
+kernel void filter_single_3x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -673,7 +673,7 @@ kernel void filter_single_3x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_5x1(global float* imgIn,
+type_single filter_sum_single_5x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -698,7 +698,7 @@ type_single filter_sum_single_5x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_5x1) * COLS_5x1 + x + COLS_HALF_5x1;
             sum += color * filterKernel[idx];
@@ -720,7 +720,7 @@ type_single filter_sum_single_5x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_5x1(global float* imgIn,
+kernel void filter_single_5x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -740,7 +740,7 @@ kernel void filter_single_5x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_7x1(global float* imgIn,
+type_single filter_sum_single_7x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -765,7 +765,7 @@ type_single filter_sum_single_7x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_7x1) * COLS_7x1 + x + COLS_HALF_7x1;
             sum += color * filterKernel[idx];
@@ -787,7 +787,7 @@ type_single filter_sum_single_7x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_7x1(global float* imgIn,
+kernel void filter_single_7x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -807,7 +807,7 @@ kernel void filter_single_7x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_9x1(global float* imgIn,
+type_single filter_sum_single_9x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel,
                                                       const int3 coordBase,
@@ -832,7 +832,7 @@ type_single filter_sum_single_9x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_9x1) * COLS_9x1 + x + COLS_HALF_9x1;
             sum += color * filterKernel[idx];
@@ -854,7 +854,7 @@ type_single filter_sum_single_9x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_9x1(global float* imgIn,
+kernel void filter_single_9x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut,
                                           constant float* filterKernel,
@@ -873,7 +873,7 @@ kernel void filter_single_9x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double(global float* imgIn,
+type_double filter_sum_double(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -902,7 +902,7 @@ type_double filter_sum_double(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + filterRowsHalf) * filterCols + x + filterColsHalf;
             sum.x += color * filterKernel1[idx];
@@ -925,7 +925,7 @@ type_double filter_sum_double(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2)
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double(global float* imgIn,
+kernel void filter_double(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -952,7 +952,7 @@ kernel void filter_double(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_3x3(global float* imgIn,
+type_double filter_sum_double_3x3(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -978,7 +978,7 @@ type_double filter_sum_double_3x3(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_3x3) * COLS_3x3 + x + COLS_HALF_3x3;
             sum.x += color * filterKernel1[idx];
@@ -998,7 +998,7 @@ type_double filter_sum_double_3x3(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_3x3(global float* imgIn,
+kernel void filter_double_3x3(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1021,7 +1021,7 @@ kernel void filter_double_3x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_5x5(global float* imgIn,
+type_double filter_sum_double_5x5(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1047,7 +1047,7 @@ type_double filter_sum_double_5x5(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_5x5) * COLS_5x5 + x + COLS_HALF_5x5;
             sum.x += color * filterKernel1[idx];
@@ -1067,7 +1067,7 @@ type_double filter_sum_double_5x5(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_5x5(global float* imgIn,
+kernel void filter_double_5x5(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1090,7 +1090,7 @@ kernel void filter_double_5x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_7x7(global float* imgIn,
+type_double filter_sum_double_7x7(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1116,7 +1116,7 @@ type_double filter_sum_double_7x7(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_7x7) * COLS_7x7 + x + COLS_HALF_7x7;
             sum.x += color * filterKernel1[idx];
@@ -1136,7 +1136,7 @@ type_double filter_sum_double_7x7(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_7x7(global float* imgIn,
+kernel void filter_double_7x7(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1159,7 +1159,7 @@ kernel void filter_double_7x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_9x9(global float* imgIn,
+type_double filter_sum_double_9x9(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1185,7 +1185,7 @@ type_double filter_sum_double_9x9(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_9x9) * COLS_9x9 + x + COLS_HALF_9x9;
             sum.x += color * filterKernel1[idx];
@@ -1205,7 +1205,7 @@ type_double filter_sum_double_9x9(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_9x9(global float* imgIn,
+kernel void filter_double_9x9(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1229,7 +1229,7 @@ kernel void filter_double_9x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_1x3(global float* imgIn,
+type_double filter_sum_double_1x3(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1255,7 +1255,7 @@ type_double filter_sum_double_1x3(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x3) * COLS_1x3 + x + COLS_HALF_1x3;
             sum.x += color * filterKernel1[idx];
@@ -1278,7 +1278,7 @@ type_double filter_sum_double_1x3(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_1x3(global float* imgIn,
+kernel void filter_double_1x3(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1301,7 +1301,7 @@ kernel void filter_double_1x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_1x5(global float* imgIn,
+type_double filter_sum_double_1x5(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1327,7 +1327,7 @@ type_double filter_sum_double_1x5(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x5) * COLS_1x5 + x + COLS_HALF_1x5;
             sum.x += color * filterKernel1[idx];
@@ -1350,7 +1350,7 @@ type_double filter_sum_double_1x5(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_1x5(global float* imgIn,
+kernel void filter_double_1x5(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1373,7 +1373,7 @@ kernel void filter_double_1x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_1x7(global float* imgIn,
+type_double filter_sum_double_1x7(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1399,7 +1399,7 @@ type_double filter_sum_double_1x7(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x7) * COLS_1x7 + x + COLS_HALF_1x7;
             sum.x += color * filterKernel1[idx];
@@ -1422,7 +1422,7 @@ type_double filter_sum_double_1x7(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_1x7(global float* imgIn,
+kernel void filter_double_1x7(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1445,7 +1445,7 @@ kernel void filter_double_1x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_1x9(global float* imgIn,
+type_double filter_sum_double_1x9(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1471,7 +1471,7 @@ type_double filter_sum_double_1x9(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_1x9) * COLS_1x9 + x + COLS_HALF_1x9;
             sum.x += color * filterKernel1[idx];
@@ -1494,7 +1494,7 @@ type_double filter_sum_double_1x9(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_1x9(global float* imgIn,
+kernel void filter_double_1x9(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1517,7 +1517,7 @@ kernel void filter_double_1x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_3x1(global float* imgIn,
+type_double filter_sum_double_3x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1543,7 +1543,7 @@ type_double filter_sum_double_3x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_3x1) * COLS_3x1 + x + COLS_HALF_3x1;
             sum.x += color * filterKernel1[idx];
@@ -1566,7 +1566,7 @@ type_double filter_sum_double_3x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_3x1(global float* imgIn,
+kernel void filter_double_3x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1589,7 +1589,7 @@ kernel void filter_double_3x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_5x1(global float* imgIn,
+type_double filter_sum_double_5x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1615,7 +1615,7 @@ type_double filter_sum_double_5x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_5x1) * COLS_5x1 + x + COLS_HALF_5x1;
             sum.x += color * filterKernel1[idx];
@@ -1638,7 +1638,7 @@ type_double filter_sum_double_5x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_5x1(global float* imgIn,
+kernel void filter_double_5x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1661,7 +1661,7 @@ kernel void filter_double_5x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_7x1(global float* imgIn,
+type_double filter_sum_double_7x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1687,7 +1687,7 @@ type_double filter_sum_double_7x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_7x1) * COLS_7x1 + x + COLS_HALF_7x1;
             sum.x += color * filterKernel1[idx];
@@ -1710,7 +1710,7 @@ type_double filter_sum_double_7x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_7x1(global float* imgIn,
+kernel void filter_double_7x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,
@@ -1733,7 +1733,7 @@ kernel void filter_double_7x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_9x1(global float* imgIn,
+type_double filter_sum_double_9x1(constant float* imgIn,
                                                       constant struct Lookup* locationLookup,
                                                       constant float* filterKernel1,
                                                       constant float* filterKernel2,
@@ -1759,7 +1759,7 @@ type_double filter_sum_double_9x1(global float* imgIn,
         {
             coordCurrent.x = coordBase.x + x;
             coordBorder = borderCoordinate(coordCurrent, rows, cols, border);
-            color = readValue(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
+            color = readValueC(imgIn, locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);
 
             const int idx = (y + ROWS_HALF_9x1) * COLS_9x1 + x + COLS_HALF_9x1;
             sum.x += color * filterKernel1[idx];
@@ -1782,7 +1782,7 @@ type_double filter_sum_double_9x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_9x1(global float* imgIn,
+kernel void filter_double_9x1(constant float* imgIn,
                                           constant struct Lookup* locationLookup,
                                           global float* imgOut1,
                                           global float* imgOut2,

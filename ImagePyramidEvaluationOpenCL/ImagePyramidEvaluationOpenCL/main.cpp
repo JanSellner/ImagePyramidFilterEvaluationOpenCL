@@ -17,23 +17,28 @@ struct TestResults
 
 void testBatch(APyramid& pyramid)
 {
-    std::vector<APyramid::Method> methods = {
-        // Default cases
-        APyramid::SINGLE ,
-        APyramid::SINGLE_LOCAL,
-        APyramid::SINGLE_SEPARATION,
-        APyramid::DOUBLE,
+    //std::vector<APyramid::Method> methods = {
+    //    // Default cases
+    //    APyramid::SINGLE,
+    //    APyramid::SINGLE_LOCAL,
+    //    APyramid::SINGLE_SEPARATION,
+    //    APyramid::DOUBLE,
 
-        // Selected combinations
-        APyramid::SINGLE_PREDEFINED,
-        APyramid::SINGLE_PREDEFINED_LOCAL,
-        APyramid::DOUBLE_PREDEFINED,
-        APyramid::DOUBLE_PREDEFINED_LOCAL,
-        APyramid::DOUBLE_LOCAL
+    //    // Selected combinations
+    //    APyramid::SINGLE_PREDEFINED,
+    //    APyramid::SINGLE_PREDEFINED_LOCAL,
+    //    APyramid::DOUBLE_PREDEFINED,
+    //    APyramid::DOUBLE_PREDEFINED_LOCAL,
+    //    APyramid::DOUBLE_LOCAL
+    //};
+
+    std::vector<APyramid::Method> methods = {
+        APyramid::SINGLE,
+        APyramid::SINGLE_LOCAL
     };
 
     std::vector<int> sigmaSizes = { 1, 2, 3, 4};
-    int iterations = 20;
+    const int iterations = 20;
 
     std::map<APyramid::Method, std::vector<TestResults>> results;
 
@@ -127,13 +132,13 @@ void testBatch(APyramid& pyramid)
 void test(APyramid& pyramid)
 {
     APyramid::Settings settings;
-    settings.method = APyramid::DOUBLE_PREDEFINED_LOCAL;
+    settings.method = APyramid::SINGLE_LOCAL;
     settings.sigmaSize = 2;
     pyramid.setSettings(settings);
 
     pyramid.init();
-    
-    long long time = pyramid.startFilterTest();
+
+    const long long time = pyramid.startFilterTest();
     std::cout << "time: " << time << std::endl;
     
     pyramid.readImages();
@@ -205,9 +210,9 @@ int main()
     cv::cvtColor(img, imgGray, cv::COLOR_BGR2GRAY);
     imgGray.convertTo(imgGray, CV_32FC1, 1.0 / 255.0);
 
-    PyramidImages pyramid(imgGray);
+    //PyramidImages pyramid(imgGray);
     //PyramidCubes pyramid(imgGray);
-    //PyramidBuffer pyramid(imgGray);
+    PyramidBuffer pyramid(imgGray);
 
     testBatch(pyramid);
     //test(pyramid);

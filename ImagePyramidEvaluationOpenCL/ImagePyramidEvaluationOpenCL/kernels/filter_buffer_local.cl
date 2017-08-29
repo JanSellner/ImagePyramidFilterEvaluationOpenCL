@@ -7,7 +7,7 @@
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local(global float* imgIn,
+type_single filter_sum_single_local(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             const int filterRowsHalf,
@@ -55,7 +55,7 @@ type_single filter_sum_single_local(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - filterColsHalf + xBase, y - filterRowsHalf + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -70,7 +70,7 @@ type_single filter_sum_single_local(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - filterColsHalf + xBase, y - filterRowsHalf + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -114,7 +114,7 @@ type_single filter_sum_single_local(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2)
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local(global float* imgIn,
+kernel void filter_single_local(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -138,7 +138,7 @@ kernel void filter_single_local(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_3x3(global float* imgIn,
+type_single filter_sum_single_local_3x3(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -183,7 +183,7 @@ type_single filter_sum_single_local_3x3(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x3 + xBase, y - ROWS_HALF_3x3 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -198,7 +198,7 @@ type_single filter_sum_single_local_3x3(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x3 + xBase, y - ROWS_HALF_3x3 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -239,7 +239,7 @@ type_single filter_sum_single_local_3x3(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_3x3(global float* imgIn,
+kernel void filter_single_local_3x3(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -259,7 +259,7 @@ kernel void filter_single_local_3x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_5x5(global float* imgIn,
+type_single filter_sum_single_local_5x5(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -304,7 +304,7 @@ type_single filter_sum_single_local_5x5(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x5 + xBase, y - ROWS_HALF_5x5 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -319,7 +319,7 @@ type_single filter_sum_single_local_5x5(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x5 + xBase, y - ROWS_HALF_5x5 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -360,7 +360,7 @@ type_single filter_sum_single_local_5x5(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_5x5(global float* imgIn,
+kernel void filter_single_local_5x5(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -380,7 +380,7 @@ kernel void filter_single_local_5x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_7x7(global float* imgIn,
+type_single filter_sum_single_local_7x7(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -425,7 +425,7 @@ type_single filter_sum_single_local_7x7(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x7 + xBase, y - ROWS_HALF_7x7 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -440,7 +440,7 @@ type_single filter_sum_single_local_7x7(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x7 + xBase, y - ROWS_HALF_7x7 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -481,7 +481,7 @@ type_single filter_sum_single_local_7x7(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_7x7(global float* imgIn,
+kernel void filter_single_local_7x7(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -501,7 +501,7 @@ kernel void filter_single_local_7x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_9x9(global float* imgIn,
+type_single filter_sum_single_local_9x9(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -546,7 +546,7 @@ type_single filter_sum_single_local_9x9(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x9 + xBase, y - ROWS_HALF_9x9 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -561,7 +561,7 @@ type_single filter_sum_single_local_9x9(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x9 + xBase, y - ROWS_HALF_9x9 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -602,7 +602,7 @@ type_single filter_sum_single_local_9x9(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_9x9(global float* imgIn,
+kernel void filter_single_local_9x9(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -623,7 +623,7 @@ kernel void filter_single_local_9x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_1x3(global float* imgIn,
+type_single filter_sum_single_local_1x3(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -668,7 +668,7 @@ type_single filter_sum_single_local_1x3(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x3 + xBase, y - ROWS_HALF_1x3 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -683,7 +683,7 @@ type_single filter_sum_single_local_1x3(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x3 + xBase, y - ROWS_HALF_1x3 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -727,7 +727,7 @@ type_single filter_sum_single_local_1x3(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_1x3(global float* imgIn,
+kernel void filter_single_local_1x3(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -747,7 +747,7 @@ kernel void filter_single_local_1x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_1x5(global float* imgIn,
+type_single filter_sum_single_local_1x5(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -792,7 +792,7 @@ type_single filter_sum_single_local_1x5(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x5 + xBase, y - ROWS_HALF_1x5 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -807,7 +807,7 @@ type_single filter_sum_single_local_1x5(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x5 + xBase, y - ROWS_HALF_1x5 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -851,7 +851,7 @@ type_single filter_sum_single_local_1x5(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_1x5(global float* imgIn,
+kernel void filter_single_local_1x5(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -871,7 +871,7 @@ kernel void filter_single_local_1x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_1x7(global float* imgIn,
+type_single filter_sum_single_local_1x7(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -916,7 +916,7 @@ type_single filter_sum_single_local_1x7(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x7 + xBase, y - ROWS_HALF_1x7 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -931,7 +931,7 @@ type_single filter_sum_single_local_1x7(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x7 + xBase, y - ROWS_HALF_1x7 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -975,7 +975,7 @@ type_single filter_sum_single_local_1x7(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_1x7(global float* imgIn,
+kernel void filter_single_local_1x7(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -995,7 +995,7 @@ kernel void filter_single_local_1x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_1x9(global float* imgIn,
+type_single filter_sum_single_local_1x9(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -1040,7 +1040,7 @@ type_single filter_sum_single_local_1x9(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x9 + xBase, y - ROWS_HALF_1x9 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1055,7 +1055,7 @@ type_single filter_sum_single_local_1x9(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x9 + xBase, y - ROWS_HALF_1x9 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1099,7 +1099,7 @@ type_single filter_sum_single_local_1x9(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_1x9(global float* imgIn,
+kernel void filter_single_local_1x9(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -1119,7 +1119,7 @@ kernel void filter_single_local_1x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_3x1(global float* imgIn,
+type_single filter_sum_single_local_3x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -1164,7 +1164,7 @@ type_single filter_sum_single_local_3x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x1 + xBase, y - ROWS_HALF_3x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1179,7 +1179,7 @@ type_single filter_sum_single_local_3x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x1 + xBase, y - ROWS_HALF_3x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1223,7 +1223,7 @@ type_single filter_sum_single_local_3x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_3x1(global float* imgIn,
+kernel void filter_single_local_3x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -1243,7 +1243,7 @@ kernel void filter_single_local_3x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_5x1(global float* imgIn,
+type_single filter_sum_single_local_5x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -1288,7 +1288,7 @@ type_single filter_sum_single_local_5x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x1 + xBase, y - ROWS_HALF_5x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1303,7 +1303,7 @@ type_single filter_sum_single_local_5x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x1 + xBase, y - ROWS_HALF_5x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1347,7 +1347,7 @@ type_single filter_sum_single_local_5x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_5x1(global float* imgIn,
+kernel void filter_single_local_5x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -1367,7 +1367,7 @@ kernel void filter_single_local_5x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_7x1(global float* imgIn,
+type_single filter_sum_single_local_7x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -1412,7 +1412,7 @@ type_single filter_sum_single_local_7x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x1 + xBase, y - ROWS_HALF_7x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1427,7 +1427,7 @@ type_single filter_sum_single_local_7x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x1 + xBase, y - ROWS_HALF_7x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1471,7 +1471,7 @@ type_single filter_sum_single_local_7x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_7x1(global float* imgIn,
+kernel void filter_single_local_7x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -1491,7 +1491,7 @@ kernel void filter_single_local_7x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_single filter_sum_single_local_9x1(global float* imgIn,
+type_single filter_sum_single_local_9x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel,
                                                             int3 coordBase,
@@ -1536,7 +1536,7 @@ type_single filter_sum_single_local_9x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x1 + xBase, y - ROWS_HALF_9x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1551,7 +1551,7 @@ type_single filter_sum_single_local_9x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x1 + xBase, y - ROWS_HALF_9x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1595,7 +1595,7 @@ type_single filter_sum_single_local_9x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_single_local_9x1(global float* imgIn,
+kernel void filter_single_local_9x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut,
                                                 constant float* filterKernel,
@@ -1614,7 +1614,7 @@ kernel void filter_single_local_9x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local(global float* imgIn,
+type_double filter_sum_double_local(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -1663,7 +1663,7 @@ type_double filter_sum_double_local(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - filterColsHalf + xBase, y - filterRowsHalf + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1678,7 +1678,7 @@ type_double filter_sum_double_local(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - filterColsHalf + xBase, y - filterRowsHalf + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_21x21 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1723,7 +1723,7 @@ type_double filter_sum_double_local(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2)
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local(global float* imgIn,
+kernel void filter_double_local(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -1750,7 +1750,7 @@ kernel void filter_double_local(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_3x3(global float* imgIn,
+type_double filter_sum_double_local_3x3(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -1796,7 +1796,7 @@ type_double filter_sum_double_local_3x3(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x3 + xBase, y - ROWS_HALF_3x3 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1811,7 +1811,7 @@ type_double filter_sum_double_local_3x3(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x3 + xBase, y - ROWS_HALF_3x3 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_3x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1853,7 +1853,7 @@ type_double filter_sum_double_local_3x3(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_3x3(global float* imgIn,
+kernel void filter_double_local_3x3(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -1876,7 +1876,7 @@ kernel void filter_double_local_3x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_5x5(global float* imgIn,
+type_double filter_sum_double_local_5x5(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -1922,7 +1922,7 @@ type_double filter_sum_double_local_5x5(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x5 + xBase, y - ROWS_HALF_5x5 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -1937,7 +1937,7 @@ type_double filter_sum_double_local_5x5(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x5 + xBase, y - ROWS_HALF_5x5 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_5x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -1979,7 +1979,7 @@ type_double filter_sum_double_local_5x5(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_5x5(global float* imgIn,
+kernel void filter_double_local_5x5(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2002,7 +2002,7 @@ kernel void filter_double_local_5x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_7x7(global float* imgIn,
+type_double filter_sum_double_local_7x7(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2048,7 +2048,7 @@ type_double filter_sum_double_local_7x7(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x7 + xBase, y - ROWS_HALF_7x7 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2063,7 +2063,7 @@ type_double filter_sum_double_local_7x7(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x7 + xBase, y - ROWS_HALF_7x7 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_7x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2105,7 +2105,7 @@ type_double filter_sum_double_local_7x7(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_7x7(global float* imgIn,
+kernel void filter_double_local_7x7(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2128,7 +2128,7 @@ kernel void filter_double_local_7x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_9x9(global float* imgIn,
+type_double filter_sum_double_local_9x9(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2174,7 +2174,7 @@ type_double filter_sum_double_local_9x9(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x9 + xBase, y - ROWS_HALF_9x9 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2189,7 +2189,7 @@ type_double filter_sum_double_local_9x9(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x9 + xBase, y - ROWS_HALF_9x9 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_9x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2231,7 +2231,7 @@ type_double filter_sum_double_local_9x9(global float* imgIn,
  * @param filterKernel 1D array with the filter values. The filter is centred on the current pixel and the size of the filter must be odd
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_9x9(global float* imgIn,
+kernel void filter_double_local_9x9(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2255,7 +2255,7 @@ kernel void filter_double_local_9x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_1x3(global float* imgIn,
+type_double filter_sum_double_local_1x3(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2301,7 +2301,7 @@ type_double filter_sum_double_local_1x3(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x3 + xBase, y - ROWS_HALF_1x3 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2316,7 +2316,7 @@ type_double filter_sum_double_local_1x3(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x3 + xBase, y - ROWS_HALF_1x3 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x3 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2361,7 +2361,7 @@ type_double filter_sum_double_local_1x3(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_1x3(global float* imgIn,
+kernel void filter_double_local_1x3(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2384,7 +2384,7 @@ kernel void filter_double_local_1x3(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_1x5(global float* imgIn,
+type_double filter_sum_double_local_1x5(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2430,7 +2430,7 @@ type_double filter_sum_double_local_1x5(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x5 + xBase, y - ROWS_HALF_1x5 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2445,7 +2445,7 @@ type_double filter_sum_double_local_1x5(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x5 + xBase, y - ROWS_HALF_1x5 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x5 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2490,7 +2490,7 @@ type_double filter_sum_double_local_1x5(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_1x5(global float* imgIn,
+kernel void filter_double_local_1x5(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2513,7 +2513,7 @@ kernel void filter_double_local_1x5(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_1x7(global float* imgIn,
+type_double filter_sum_double_local_1x7(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2559,7 +2559,7 @@ type_double filter_sum_double_local_1x7(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x7 + xBase, y - ROWS_HALF_1x7 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2574,7 +2574,7 @@ type_double filter_sum_double_local_1x7(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x7 + xBase, y - ROWS_HALF_1x7 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x7 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2619,7 +2619,7 @@ type_double filter_sum_double_local_1x7(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_1x7(global float* imgIn,
+kernel void filter_double_local_1x7(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2642,7 +2642,7 @@ kernel void filter_double_local_1x7(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_1x9(global float* imgIn,
+type_double filter_sum_double_local_1x9(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2688,7 +2688,7 @@ type_double filter_sum_double_local_1x9(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x9 + xBase, y - ROWS_HALF_1x9 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2703,7 +2703,7 @@ type_double filter_sum_double_local_1x9(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_1x9 + xBase, y - ROWS_HALF_1x9 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_1x9 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2748,7 +2748,7 @@ type_double filter_sum_double_local_1x9(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_1x9(global float* imgIn,
+kernel void filter_double_local_1x9(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2771,7 +2771,7 @@ kernel void filter_double_local_1x9(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_3x1(global float* imgIn,
+type_double filter_sum_double_local_3x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2817,7 +2817,7 @@ type_double filter_sum_double_local_3x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x1 + xBase, y - ROWS_HALF_3x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2832,7 +2832,7 @@ type_double filter_sum_double_local_3x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_3x1 + xBase, y - ROWS_HALF_3x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_3x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -2877,7 +2877,7 @@ type_double filter_sum_double_local_3x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_3x1(global float* imgIn,
+kernel void filter_double_local_3x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -2900,7 +2900,7 @@ kernel void filter_double_local_3x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_5x1(global float* imgIn,
+type_double filter_sum_double_local_5x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -2946,7 +2946,7 @@ type_double filter_sum_double_local_5x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x1 + xBase, y - ROWS_HALF_5x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -2961,7 +2961,7 @@ type_double filter_sum_double_local_5x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_5x1 + xBase, y - ROWS_HALF_5x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_5x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -3006,7 +3006,7 @@ type_double filter_sum_double_local_5x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_5x1(global float* imgIn,
+kernel void filter_double_local_5x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -3029,7 +3029,7 @@ kernel void filter_double_local_5x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_7x1(global float* imgIn,
+type_double filter_sum_double_local_7x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -3075,7 +3075,7 @@ type_double filter_sum_double_local_7x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x1 + xBase, y - ROWS_HALF_7x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -3090,7 +3090,7 @@ type_double filter_sum_double_local_7x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_7x1 + xBase, y - ROWS_HALF_7x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_7x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -3135,7 +3135,7 @@ type_double filter_sum_double_local_7x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_7x1(global float* imgIn,
+kernel void filter_double_local_7x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,
@@ -3158,7 +3158,7 @@ kernel void filter_double_local_7x1(global float* imgIn,
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-type_double filter_sum_double_local_9x1(global float* imgIn,
+type_double filter_sum_double_local_9x1(constant float* imgIn,
                                                             constant struct Lookup* locationLookup,
                                                             constant float* filterKernel1,
                                                             constant float* filterKernel2,
@@ -3204,7 +3204,7 @@ type_double filter_sum_double_local_9x1(global float* imgIn,
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x1 + xBase, y - ROWS_HALF_9x1 + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -3219,7 +3219,7 @@ type_double filter_sum_double_local_9x1(global float* imgIn,
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_9x1 + xBase, y - ROWS_HALF_9x1 + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_9x1 + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -3264,7 +3264,7 @@ type_double filter_sum_double_local_9x1(global float* imgIn,
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_double_local_9x1(global float* imgIn,
+kernel void filter_double_local_9x1(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut1,
                                                 global float* imgOut2,

@@ -5,7 +5,7 @@
  * @param coordBase pixel position to calculate the filter sum from
  * @return calculated filter sum
  */
-/* GENERATE_TYPE */ filter_sum_MULTIPLICITY_local_DERIV_NxN(global float* imgIn,
+/* GENERATE_TYPE */ filter_sum_MULTIPLICITY_local_DERIV_NxN(constant float* imgIn,
                                                             constant struct Lookup* locationLookup/* GENERATE_REMOVE_PREDEFINED:,
                                                             constant float* filterKernel/* GENERATE_DOUBLE:1,
                                                             constant float* filterKernel2*/*/,
@@ -54,7 +54,7 @@
         {
             // Coordinate from the image patch which must be stored in the current local buffer position
             int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_NxN + xBase, y - ROWS_HALF_NxN + yBase, coordBase.z), rows, cols, border);
-            localBuffer[y * LOCAL_SIZE_COLS_NxN + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+            localBuffer[y * LOCAL_SIZE_COLS_NxN + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
         }
     }
 #else
@@ -69,7 +69,7 @@
         
         // Coordinate from the image patch which must be stored in the current local buffer position
         int3 coordBorder = borderCoordinate((int3)(x - COLS_HALF_NxN + xBase, y - ROWS_HALF_NxN + yBase, coordBase.z), rows, cols, border);
-        localBuffer[y * LOCAL_SIZE_COLS_NxN + x] = readValue(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
+        localBuffer[y * LOCAL_SIZE_COLS_NxN + x] = readValueC(imgIn,  locationLookup, coordBorder.z, coordBorder.x, coordBorder.y);   // Fill local buffer
     }
 #endif
         
@@ -116,7 +116,7 @@
  * @param filterColsHalf cols of the filter divided by 2 with int cast, i.e. filterColsHalf = floor(filterCols / 2) // GENERATE_REMOVE
  * @param border int value which specifies how out-of-border accesses should be handled. The values correspond to the OpenCV border types
  */
-kernel void filter_MULTIPLICITY_local_DERIV_NxN(global float* imgIn,
+kernel void filter_MULTIPLICITY_local_DERIV_NxN(constant float* imgIn,
                                                 constant struct Lookup* locationLookup,
                                                 global float* imgOut/* GENERATE_DOUBLE:1,
                                                 global float* imgOut2*//* GENERATE_REMOVE_PREDEFINED:,

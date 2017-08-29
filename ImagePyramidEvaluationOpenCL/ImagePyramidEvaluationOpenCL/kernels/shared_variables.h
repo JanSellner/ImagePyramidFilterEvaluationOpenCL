@@ -18,6 +18,12 @@ float readValue(float* img, constant struct Lookup* lookup, int level, int x, in
 {
     return img[lookup[level].previousPixels + lookup[level].imgWidth * y + x];
 }
+
+float readValueC(constant float* img, constant struct Lookup* lookup, int level, int x, int y)
+{
+    return img[lookup[level].previousPixels + lookup[level].imgWidth * y + x];
+}
+
 //TODO: why is this overloading needed?
 //float* readAddress(float* img, constant struct Lookup* lookup, int level, int x, int y)
 //{
