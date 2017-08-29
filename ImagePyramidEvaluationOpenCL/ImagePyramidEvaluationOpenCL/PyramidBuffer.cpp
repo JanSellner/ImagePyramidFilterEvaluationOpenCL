@@ -136,7 +136,7 @@ void PyramidBuffer::createPyramid()
     opencl.getQueue().enqueueWriteBuffer(bufferLocationLookup, CL_BLOCKING, 0, sizeof(Lookup) *  this->locationLoopup.size(), this->locationLoopup.data());
 
     // Images
-    images = cl::Buffer(opencl.getContext(), CL_MEM_READ_WRITE, sizeof(float) * totalPixels);//TODO: why read_write?
+    images = cl::Buffer(opencl.getContext(), CL_MEM_READ_ONLY, sizeof(float) * totalPixels);
     imagesGx = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
     imagesGy = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
 
