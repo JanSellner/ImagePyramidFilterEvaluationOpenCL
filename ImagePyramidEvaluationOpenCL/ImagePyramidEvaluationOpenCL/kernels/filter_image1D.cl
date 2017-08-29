@@ -43,19 +43,18 @@ int3 borderCoordinate(int3 coord, int rows, int cols, int border)
             coordAdjusted.y = rows - (coord.y - rows + 1) - 1;
         }
     }
-    // TODO: not correct for buffer objects
     // BORDER_REPLICATE is the default setting of the used sampler
 
     return coordAdjusted;
 }
 
-#include "filter_buffer_normal.cl"
-#include "filter_buffer_local.cl"
+#include "filter_image1D_normal.cl"
+#include "filter_image1D_local.cl"
 
 /**
  * @see https://github.com/opencv/opencv/blob/master/modules/imgproc/src/opencl/resize.cl
  */
-kernel void fed_resize(global float* img,
+kernel void fed_resize(read_only image1d_buffer_t img,
                        constant struct Lookup* locationLookup,
                        const int class_id)
 {
@@ -91,18 +90,18 @@ kernel void fed_resize(global float* img,
             for (int px = 0; px < XSCALE; ++px)
             {
                 int x = min(sx + px, src_cols - 1);
-                const float val = readValue(img, locationLookup, class_id, x, y);
+                const float val = readValue1D(img, locationLookup, class_id, x, y);
                 sum += val;
                 //sum += convertToWTV(loadpix(src + src_index + x*TSIZE));
             }
         }
 
-        writeValue(img, locationLookup, class_id + 1, dx, dy, sum * SCALE);
+        writeValue1D(img, locationLookup, class_id + 1, dx, dy, sum * SCALE);
         //storepix(convertToT(convertToWT2V(sum) * (WT2V)(SCALE)), dst + mad24(dx, TSIZE, dst_index));
     }
 }
 
-kernel void copy_inside_cube(global float* img,
+kernel void copy_inside_cube(read_write image1d_buffer_t img,
                              constant struct Lookup* locationLookup,
                              const int class_id)
 {
@@ -110,7 +109,7 @@ kernel void copy_inside_cube(global float* img,
     const int y = get_global_id(1);
     const int z = get_global_id(2);
 
-    const float val = readValue(img, locationLookup, class_id, x, y);
+    const float val = readValue1D(img, locationLookup, class_id, x, y);
 
-    writeValue(img, locationLookup, z, x, y, val);
+    writeValue1D(img, locationLookup, z, x, y, val);
 }

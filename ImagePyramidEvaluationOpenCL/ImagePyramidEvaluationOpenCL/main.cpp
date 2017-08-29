@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "utils.h"
 #include <iomanip>
+#include "PyramidImages1D.h"
 
 struct TestResults
 {
@@ -210,9 +211,10 @@ int main()
     cv::cvtColor(img, imgGray, cv::COLOR_BGR2GRAY);
     imgGray.convertTo(imgGray, CV_32FC1, 1.0 / 255.0);
 
-    PyramidImages pyramid(imgGray);
+    //PyramidImages pyramid(imgGray);
     //PyramidCubes pyramid(imgGray);
     //PyramidBuffer pyramid(imgGray);
+    PyramidImages1D pyramid(imgGray);
 
     testBatch(pyramid);
     //test(pyramid);

@@ -39,7 +39,7 @@
     <ClCompile Include="PyramidBuffer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="KernelFilterBuffer.cpp">
+    <ClCompile Include="PyramidImages1D.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,6 +89,9 @@
     <ClInclude Include="settings.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="PyramidImages1D.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="kernels\filter_images.cl" />
@@ -99,5 +102,7 @@
     <None Include="kernels\filter_images_normal.cl" />
     <None Include="kernels\filter_images_predefined-local.cl" />
     <None Include="kernels\filter_images_predefined-normal.cl" />
+    <None Include="kernels\filter_image1D.cl" />
+    <None Include="kernels\filter_image1D_normal.cl" />
   </ItemGroup>
 </Project>

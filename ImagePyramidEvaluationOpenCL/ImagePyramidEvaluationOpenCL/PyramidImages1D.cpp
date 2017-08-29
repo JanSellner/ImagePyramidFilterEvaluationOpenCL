@@ -1,23 +1,23 @@
-#include "PyramidBuffer.h"
+#include "PyramidImages1D.h"
 #include <opencv2/imgproc.hpp>
 
-PyramidBuffer::PyramidBuffer(const cv::Mat& img)
+PyramidImages1D::PyramidImages1D(const cv::Mat& img)
     : APyramid(img),
-      kernelFilter(&opencl, &programFilter),
-      kernelFilter2(&opencl, &programFilter)
+    kernelFilter(&opencl, &programFilter),
+    kernelFilter2(&opencl, &programFilter)
 {}
 
-PyramidBuffer::~PyramidBuffer()
+PyramidImages1D::~PyramidImages1D()
 {}
 
-void PyramidBuffer::init()
+void PyramidImages1D::init()
 {
     try
     {
         opencl.selectDevice();
         opencl.init();
 
-        programFilter = cl::Program(opencl.getContext(), AKernel<KernelFilterBuffer<cl::Buffer>>::kernelSource());
+        programFilter = cl::Program(opencl.getContext(), AKernel<KernelFilterBuffer<cl::Image1DBuffer>>::kernelSource());
 
 #ifdef DEBUG_INTEL
         programFilter.build((opencl.getBuildOptions() + " -Werror -g -s kernels/filter_buffer.cl").c_str());
@@ -42,7 +42,7 @@ void PyramidBuffer::init()
     }
 }
 
-long long PyramidBuffer::startFilterTest()
+long long PyramidImages1D::startFilterTest()
 {
     long long diff = 0;
 
@@ -74,11 +74,11 @@ long long PyramidBuffer::startFilterTest()
     return diff;
 }
 
-void PyramidBuffer::readImages()
+void PyramidImages1D::readImages()
 {
-    std::vector<cv::Mat> img = readImageStack(images);
-    std::vector<cv::Mat> imgGx = readImageStack(imagesGx);
-    std::vector<cv::Mat> imgGy = readImageStack(imagesGy);
+    std::vector<cv::Mat> img = readImageStack(image);
+    std::vector<cv::Mat> imgGx = readImageStack(imageGx);
+    std::vector<cv::Mat> imgGy = readImageStack(imageGy);
 
     cv::Mat testGx;
     cv::sepFilter2D(img[0], testGx, CV_32FC1, Gx2, Gx1);
@@ -87,15 +87,18 @@ void PyramidBuffer::readImages()
     cv::filter2D(img[0], testGy, CV_32FC1, Gy);
 }
 
-std::string PyramidBuffer::name()
+std::string PyramidImages1D::name()
 {
-    return "Buffer pyramid";
+    return "Image1D pyramid";
 }
 
-std::vector<cv::Mat> PyramidBuffer::readImageStack(const cl::Buffer& images)
+std::vector<cv::Mat> PyramidImages1D::readImageStack(const cl::Image1DBuffer& images)
 {
     cv::Mat pyramid(1, totalPixels, CV_32FC1);
-    opencl.getQueue().enqueueReadBuffer(images, CL_BLOCKING, 0, sizeof(float) *  totalPixels, pyramid.data);
+
+    std::array<size_t, 3> origin = { 0, 0, 0 };
+    std::array<size_t, 3> imgSize = { totalPixels, 1, 1 };
+    opencl.getQueue().enqueueReadImage(images, CL_BLOCKING, origin, imgSize, totalPixels * sizeof(float), 0, pyramid.data);
 
     ASSERT(pyramid.isContinuous(), "The pyramid data must be stored continuously in memory");
     std::vector<cv::Mat> imagesVector(locationLoopup.size() + 1);
@@ -110,7 +113,7 @@ std::vector<cv::Mat> PyramidBuffer::readImageStack(const cl::Buffer& images)
     return imagesVector;
 }
 
-void PyramidBuffer::createPyramid()
+void PyramidImages1D::createPyramid()
 {
     locationLoopup.resize(pyramidSize);
     int previousPixels = 0;
@@ -135,29 +138,37 @@ void PyramidBuffer::createPyramid()
     bufferLocationLookup = cl::Buffer(opencl.getContext(), CL_MEM_READ_ONLY, sizeof(Lookup) * this->locationLoopup.size());
     opencl.getQueue().enqueueWriteBuffer(bufferLocationLookup, CL_BLOCKING, 0, sizeof(Lookup) *  this->locationLoopup.size(), this->locationLoopup.data());
 
+    size_t maxBuffSize = 0;
+    opencl.getDevice().getInfo(CL_DEVICE_IMAGE_MAX_BUFFER_SIZE, &maxBuffSize);
+
     // Images
-    images = cl::Buffer(opencl.getContext(), CL_MEM_READ_WRITE, sizeof(float) * totalPixels);//TODO: why read_write?
-    imagesGx = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
-    imagesGy = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
+    bufferImages = cl::Buffer(opencl.getContext(), CL_MEM_READ_ONLY, sizeof(float) * totalPixels);
+    bufferImagesGx = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
+    bufferImagesGy = cl::Buffer(opencl.getContext(), CL_MEM_WRITE_ONLY, sizeof(float) * totalPixels);
+    image = cl::Image1DBuffer(opencl.getContext(), CL_MEM_READ_ONLY, cl::ImageFormat(CL_R, CL_FLOAT), totalPixels, bufferImages);
+    imageGx = cl::Image1DBuffer(opencl.getContext(), CL_MEM_READ_ONLY, cl::ImageFormat(CL_R, CL_FLOAT), totalPixels, bufferImagesGx);
+    imageGy = cl::Image1DBuffer(opencl.getContext(), CL_MEM_READ_ONLY, cl::ImageFormat(CL_R, CL_FLOAT), totalPixels, bufferImagesGy);
 
     // Copy the data to the GPU
     cl::Event lastEvent;
-    opencl.getQueue().enqueueWriteBuffer(images, CL_BLOCKING, 0, sizeof(float) * img.rows * img.cols, img.data);
+    std::array<size_t, 3> origin = { 0, 0, 0 };
+    std::array<size_t, 3> imgSize = { img.cols * img.rows, 1, 1 };
+    opencl.getQueue().enqueueWriteImage(image, CL_BLOCKING, origin, imgSize, totalPixels * sizeof(float), 0, img.data);
 
     for (int o = 0; o < numberOctaves; ++o)
     {
-        lastEvent = kernelFilter.runCopyInsideCube(images, bufferLocationLookup, o, locationLoopup);
+        lastEvent = kernelFilter.runCopyInsideCube(image, bufferLocationLookup, o, locationLoopup);
         kernelFilter.addEvent(lastEvent);
 
         if (o < numberOctaves - 1)
         {
-            lastEvent = kernelFilter.runHalfsampleImage(images, bufferLocationLookup, o, locationLoopup);
+            lastEvent = kernelFilter.runHalfsampleImage(image, bufferLocationLookup, o, locationLoopup);
             kernelFilter.addEvent(lastEvent);
         }
     }
 }
 
-void PyramidBuffer::calcDerivativesSingle()
+void PyramidImages1D::calcDerivativesSingle()
 {
     kernelFilter.setKernel1(Gx);
     kernelFilter2.setKernel1(Gy);
@@ -167,12 +178,12 @@ void PyramidBuffer::calcDerivativesSingle()
 
     for (int o = 0; o < numberOctaves; ++o)
     {
-        kernelFilter.runSingle(images, imagesGx, bufferLocationLookup, o, locationLoopup);
-        kernelFilter2.runSingle(images, imagesGy, bufferLocationLookup, o, locationLoopup);
+        kernelFilter.runSingle(image, imageGx, bufferLocationLookup, o, locationLoopup);
+        kernelFilter2.runSingle(image, imageGy, bufferLocationLookup, o, locationLoopup);
     }
 }
 
-void PyramidBuffer::calcDerivativesSingleLocal()
+void PyramidImages1D::calcDerivativesSingleLocal()
 {
     kernelFilter.setKernel1(Gx);
     kernelFilter2.setKernel1(Gy);
@@ -182,12 +193,12 @@ void PyramidBuffer::calcDerivativesSingleLocal()
 
     for (int o = 0; o < numberOctaves; ++o)
     {
-        kernelFilter.runSingleLocal(images, imagesGx, bufferLocationLookup, o, locationLoopup);
-        kernelFilter2.runSingleLocal(images, imagesGy, bufferLocationLookup, o, locationLoopup);
+        kernelFilter.runSingleLocal(image, imageGx, bufferLocationLookup, o, locationLoopup);
+        kernelFilter2.runSingleLocal(image, imageGy, bufferLocationLookup, o, locationLoopup);
     }
 }
 
-void PyramidBuffer::calcDerivativesSingleSeparationLocal()
+void PyramidImages1D::calcDerivativesSingleSeparationLocal()
 {
     kernelFilter.setKernelSeparation1(Gx1, Gx2);
     kernelFilter2.setKernelSeparation1(Gy1, Gy2);
@@ -197,7 +208,7 @@ void PyramidBuffer::calcDerivativesSingleSeparationLocal()
 
     for (int o = 0; o < numberOctaves; ++o)
     {
-        kernelFilter.runSingleSeparationLocal(images, imagesGx, bufferLocationLookup, o, locationLoopup);
-        kernelFilter2.runSingleSeparationLocal(images, imagesGy, bufferLocationLookup, o, locationLoopup);
+        kernelFilter.runSingleSeparationLocal(image, imageGx, bufferLocationLookup, o, locationLoopup);
+        kernelFilter2.runSingleSeparationLocal(image, imageGy, bufferLocationLookup, o, locationLoopup);
     }
 }

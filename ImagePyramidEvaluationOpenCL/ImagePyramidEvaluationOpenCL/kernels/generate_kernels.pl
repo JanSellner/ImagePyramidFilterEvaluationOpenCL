@@ -26,6 +26,9 @@ generate_filter("filter_cubes_local.base.cl");
 generate_filter("filter_buffer_normal.base.cl");
 generate_filter("filter_buffer_local.base.cl");
 
+generate_filter("filter_image1D_normal.base.cl");
+generate_filter("filter_image1D_local.base.cl");
+
 sub generate_defines
 {
     my $filenameBase = $_[0];
