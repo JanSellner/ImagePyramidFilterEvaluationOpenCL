@@ -40,7 +40,7 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            queue->enqueueNDRangeKernel(kernel, offset, global, cl::NullRange, &events, &eventFilter);
+            queue->enqueueNDRangeKernel(kernel, offset, global, local, &events, &eventFilter);
 
             // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
             events.clear();
@@ -62,7 +62,7 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            queue->enqueueNDRangeKernel(kernel, offset, global, cl::NullRange, &events, &eventFilter);
+            queue->enqueueNDRangeKernel(kernel, offset, global, local, &events, &eventFilter);
 
             // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
             events.clear();
@@ -96,7 +96,6 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            const cl::NDRange local(16, 16);
             queue->enqueueNDRangeKernel(kernel, offset, global, local, &events, &eventFilter);
 
             // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -119,7 +118,6 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            const cl::NDRange local(16, 16);
             queue->enqueueNDRangeKernel(kernel, offset, global, local, &events, &eventFilter);
 
             // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -169,7 +167,6 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            const cl::NDRange local(16, 16);
             queue->enqueueNDRangeKernel(kernelX, offset, global, local, &events);
             queue->enqueueNDRangeKernel(kernelY, offset, global, local, nullptr, &eventFilter);
 
@@ -203,7 +200,6 @@ public:
             cl::Event eventFilter;
             const cl::NDRange offset(0, 0, base);
             const cl::NDRange global(cols, rows, depth);
-            const cl::NDRange local(16, 16);
             queue->enqueueNDRangeKernel(kernelX, offset, global, local, &events);
             queue->enqueueNDRangeKernel(kernelY, offset, global, local, nullptr, &eventFilter);
 

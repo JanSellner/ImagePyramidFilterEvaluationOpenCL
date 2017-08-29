@@ -9,7 +9,7 @@ class KernelFilter : public AKernel<Derived>
 {
 public:
     KernelFilter(AOpenCLInterface* const opencl, cl::Program* const program)
-        : AKernel<Derived>(opencl, program)
+        : AKernel<Derived>(opencl, program), local(16, 16)
     {}
 
     virtual ~KernelFilter()
@@ -186,4 +186,6 @@ protected:
     std::vector<Lookup> lookupKernelDoubleComplete;
 
     int border = cv::BORDER_REPLICATE;
+
+    cl::NDRange local;
 };

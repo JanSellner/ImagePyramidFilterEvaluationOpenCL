@@ -38,7 +38,7 @@ cl::Event KernelFilterImages::runSingle(const cl::Image2D& imgSrc, SPImage2D& im
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -58,7 +58,7 @@ cl::Event KernelFilterImages::runSingle(const cl::Image2D& imgSrc, SPImage2D& im
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -91,7 +91,6 @@ cl::Event KernelFilterImages::runSingleLocal(const cl::Image2D& imgSrc, SPImage2
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -112,7 +111,6 @@ cl::Event KernelFilterImages::runSingleLocal(const cl::Image2D& imgSrc, SPImage2
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -147,7 +145,6 @@ cl::Event KernelFilterImages::runSingleLocalOnePass(const cl::Image2D& imgSrc, S
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -169,7 +166,6 @@ cl::Event KernelFilterImages::runSingleLocalOnePass(const cl::Image2D& imgSrc, S
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -211,8 +207,8 @@ cl::Event KernelFilterImages::runSingleSeparation(const cl::Image2D& imgSrc, SPI
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, cl::NullRange, &events);
-        queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, cl::NullRange, nullptr, &eventFilter);
+        queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, local, &events);
+        queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, local, nullptr, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -241,8 +237,8 @@ cl::Event KernelFilterImages::runSingleSeparation(const cl::Image2D& imgSrc, SPI
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, cl::NullRange, &events);
-        queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, cl::NullRange, nullptr, &eventFilter);
+        queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, local, &events);
+        queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, local, nullptr, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -283,7 +279,6 @@ cl::Event KernelFilterImages::runSingleSeparationLocal(const cl::Image2D& imgSrc
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, local, &events);
         queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, local, nullptr, &eventFilter);
 
@@ -314,7 +309,6 @@ cl::Event KernelFilterImages::runSingleSeparationLocal(const cl::Image2D& imgSrc
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernelX, cl::NullRange, global, local, &events);
         queue->enqueueNDRangeKernel(kernelY, cl::NullRange, global, local, nullptr, &eventFilter);
 
@@ -346,7 +340,6 @@ cl::Event KernelFilterImages::runSinglePredefined(const cl::Image2D& imgSrc, SPI
 
     cl::Event eventFilter;
     const cl::NDRange global(cols, rows);
-    const cl::NDRange local(16, 16);
     queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
     // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -376,7 +369,6 @@ cl::Event KernelFilterImages::runSinglePredefinedLocal(const cl::Image2D& imgSrc
 
     cl::Event eventFilter;
     const cl::NDRange global(cols, rows);
-    const cl::NDRange local(16, 16);
     queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
     // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -413,7 +405,7 @@ cl::Event KernelFilterImages::runDouble(const cl::Image2D& imgSrc, SPImage2D& im
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -435,7 +427,7 @@ cl::Event KernelFilterImages::runDouble(const cl::Image2D& imgSrc, SPImage2D& im
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+        queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
         events.clear();
@@ -472,7 +464,6 @@ cl::Event KernelFilterImages::runDoubleLocal(const cl::Image2D& imgSrc, SPImage2
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -495,7 +486,6 @@ cl::Event KernelFilterImages::runDoubleLocal(const cl::Image2D& imgSrc, SPImage2
 
         cl::Event eventFilter;
         const cl::NDRange global(cols, rows);
-        const cl::NDRange local(16, 16);
         queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
         // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
@@ -552,9 +542,9 @@ cl::Event KernelFilterImages::runDoubleSeparation(const cl::Image2D& img, SPImag
 
         cl::Event eventKernel;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernelStep1, cl::NullRange, global, cl::NullRange, &events);
-        queue->enqueueNDRangeKernel(kernelStep2, cl::NullRange, global, cl::NullRange);
-        queue->enqueueNDRangeKernel(kernelStep3, cl::NullRange, global, cl::NullRange, nullptr, &eventKernel);
+        queue->enqueueNDRangeKernel(kernelStep1, cl::NullRange, global, local, &events);
+        queue->enqueueNDRangeKernel(kernelStep2, cl::NullRange, global, local);
+        queue->enqueueNDRangeKernel(kernelStep3, cl::NullRange, global, local, nullptr, &eventKernel);
 
         events.clear();
 
@@ -593,9 +583,9 @@ cl::Event KernelFilterImages::runDoubleSeparation(const cl::Image2D& img, SPImag
 
         cl::Event eventKernel;
         const cl::NDRange global(cols, rows);
-        queue->enqueueNDRangeKernel(kernelStep1, cl::NullRange, global, cl::NullRange, &events);
-        queue->enqueueNDRangeKernel(kernelStep2, cl::NullRange, global, cl::NullRange);
-        queue->enqueueNDRangeKernel(kernelStep3, cl::NullRange, global, cl::NullRange, nullptr, &eventKernel);
+        queue->enqueueNDRangeKernel(kernelStep1, cl::NullRange, global, local, &events);
+        queue->enqueueNDRangeKernel(kernelStep2, cl::NullRange, global, local);
+        queue->enqueueNDRangeKernel(kernelStep3, cl::NullRange, global, local, nullptr, &eventKernel);
 
         events.clear();
 
@@ -627,7 +617,7 @@ cl::Event KernelFilterImages::runDoublePredefined(const cl::Image2D& img, SPImag
 
     cl::Event eventFilter;
     const cl::NDRange global(cols, rows);
-    queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+    queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
     // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
     events.clear();
@@ -659,7 +649,7 @@ cl::Event KernelFilterImages::runDoublePredefinedLocal(const cl::Image2D& img, S
 
     cl::Event eventFilter;
     const cl::NDRange global(cols, rows);
-    queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, cl::NullRange, &events, &eventFilter);
+    queue->enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &eventFilter);
 
     // Clear for next call. From the OpenCL API side this is no problem since the event list can be freed after the enqueue function returns
     events.clear();
