@@ -1,5 +1,7 @@
 # ImagePyramidFilterEvaluationOpenCL
-Evaluation of different filter operations and different image types (image, cube, buffer) in OpenCL. This is the repository for a corresponding [blog article](https://milania.de/blog/Performance_evaluation_of_image_convolution_with_gradient_filters_in_OpenCL) about performance evaluation of filters in OpenCL.
+Evaluation of different filter operations and different storage types (image, cube, buffer, image buffer) in OpenCL. This is the repository for two corresponding blog articles:
+- [Performance evaluation of image convolution with gradient filters in OpenCL](https://milania.de/blog/Performance_evaluation_of_image_convolution_with_gradient_filters_in_OpenCL): assesses the performance of filter operations implemented in different ways.
+- [Buffer vs. image performance for applying filters to an image pyramid in OpenCL](https://milania.de/blog/Buffer_vs._image_performance_for_applying_filters_to_an_image_pyramid_in_OpenCL): focuses on different storage types which are best suited for an image pyramid.
 
 # Build instruction
 - Install Visual Studio 2015
