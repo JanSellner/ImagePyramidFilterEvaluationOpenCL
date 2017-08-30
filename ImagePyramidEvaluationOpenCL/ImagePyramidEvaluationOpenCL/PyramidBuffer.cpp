@@ -89,7 +89,7 @@ void PyramidBuffer::readImages()
 
 std::string PyramidBuffer::name()
 {
-    return "Buffer pyramid";
+    return "Buffer";
 }
 
 std::vector<cv::Mat> PyramidBuffer::readImageStack(const cl::Buffer& images)

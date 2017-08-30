@@ -89,7 +89,7 @@ void PyramidImages1D::readImages()
 
 std::string PyramidImages1D::name()
 {
-    return "Image1D pyramid";
+    return "Image1DBuffer";
 }
 
 std::vector<cv::Mat> PyramidImages1D::readImageStack(const cl::Image1DBuffer& images)
@@ -115,6 +115,7 @@ std::vector<cv::Mat> PyramidImages1D::readImageStack(const cl::Image1DBuffer& im
 
 void PyramidImages1D::createPyramid()
 {
+    // See PyramidBuffer class for implementation details about the lookup table
     locationLoopup.resize(pyramidSize);
     int previousPixels = 0;
     int octave = 0;

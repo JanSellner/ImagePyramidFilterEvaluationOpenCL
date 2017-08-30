@@ -95,7 +95,7 @@ void PyramidCubes::readImages()
 
 std::string PyramidCubes::name()
 {
-    return "Cube pyramid";
+    return "Cube";
 }
 
 void PyramidCubes::createPyramid()

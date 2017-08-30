@@ -117,7 +117,7 @@ void PyramidImages::readImages()
 
 std::string PyramidImages::name()
 {
-    return "Image pyramid";
+    return "Image";
 }
 
 void PyramidImages::createPyramid()
