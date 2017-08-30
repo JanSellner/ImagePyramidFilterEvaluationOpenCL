@@ -112,15 +112,40 @@ std::vector<cv::Mat> PyramidBuffer::readImageStack(const cl::Buffer& images)
 
 void PyramidBuffer::createPyramid()
 {
+    /*
+     * The following code generates a lookup table for images in a pyramid which are located as one long
+     * buffer in memory (e.g. 400 MB data in memory). The goal is to provide an abstraction so that it is
+     * possible to provide the level and the pixel location and retrieve the image value in return.
+     *
+     * Example:
+     *  - original image width = 3866
+     *  - original image height = 4320
+     *  - image size in octave 0 = 3866 * 4320 = 16701120
+     *  - image size in octave 1 = (3866 / 2) * (4320 / 2) = 4175280
+     *  - image size in octave 2 = (3866 / 4) * (4320 / 4) = 1043820
+     *  - number of octaves = 4
+     *  - number of images per octave = 4
+     *
+     *  Number of pixels for image[8] (first image of octave 2):
+     *  - pixels in previous octaves = 4 * 16701120 + 4 * 4175280 = 83505600
+     *  - previous pixels for image[8] = 83505600
+     *
+     *  Number of pixels for image[9] (second image of octave 2):
+     *  - pixels in previous octaves = 4 * 16701120 + 4 * 4175280 = 83505600
+     *  - previous pixels for image[9] = 83505600 + 1043820 = 84549420
+     */
     locationLoopup.resize(pyramidSize);
     int previousPixels = 0;
     int octave = 0;
     for (size_t i = 0; i < pyramidSize; ++i)
     {
+        locationLoopup[i].previousPixels = previousPixels;
+
+        // Store size of current image
         locationLoopup[i].imgWidth = static_cast<int>(img.cols / pow(2.0, octave));
         locationLoopup[i].imgHeight = static_cast<int>(img.rows / pow(2.0, octave));
-
-        locationLoopup[i].previousPixels = previousPixels;
+        
+        // The previous pixels for the next iteration include the size of the current image
         previousPixels += locationLoopup[i].imgWidth * locationLoopup[i].imgHeight;
 
         if (i % 4 == 3)
