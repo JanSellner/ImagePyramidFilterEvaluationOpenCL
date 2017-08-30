@@ -34,7 +34,6 @@ void testBatch(APyramid& pyramid)
     //};
 
     std::vector<APyramid::Method> methods = {
-        APyramid::SINGLE,
         APyramid::SINGLE_LOCAL
     };
 
@@ -68,11 +67,11 @@ void testBatch(APyramid& pyramid)
         }
     }
 
-    std::cout << "Test of " << pyramid.name() << std::endl;
+    std::cout << "Test of " << pyramid.name() << " pyramid" << std::endl;
     std::cout << "--- Mathematica output ---" << std::endl;
     for (auto pair : results)
     {
-        std::cout << APyramid::methodToString(pair.first) << "={";
+        std::cout << APyramid::methodToString(pair.first) << pyramid.name() << "={";
 
         for (size_t i = 0; i < pair.second.size(); ++i)
         {
@@ -104,7 +103,7 @@ void testBatch(APyramid& pyramid)
     std::cout << "--- JavaScript output ---" << std::endl;
     for (auto pair : results)
     {
-        std::cout << "var " << APyramid::methodToString(pair.first) << "Mean = [";
+        std::cout << "var " << APyramid::methodToString(pair.first) << pyramid.name() << "Mean = [";
 
         for (size_t i = 0; i < pair.second.size(); ++i)
         {
@@ -211,12 +210,24 @@ int main()
     cv::cvtColor(img, imgGray, cv::COLOR_BGR2GRAY);
     imgGray.convertTo(imgGray, CV_32FC1, 1.0 / 255.0);
 
-    //PyramidImages pyramid(imgGray);
-    //PyramidCubes pyramid(imgGray);
+    {
+        PyramidImages pyramid(imgGray);
+        testBatch(pyramid);
+    }
+    {
+        PyramidCubes pyramid(imgGray);
+        testBatch(pyramid);
+    }
+    {
+        PyramidBuffer pyramid(imgGray);
+        testBatch(pyramid);
+    }
+    {
+        PyramidImages1D pyramid(imgGray);
+        testBatch(pyramid);
+    }
+    
     //PyramidBuffer pyramid(imgGray);
-    PyramidImages1D pyramid(imgGray);
-
-    testBatch(pyramid);
     //test(pyramid);
  
     return 0;

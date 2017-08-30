@@ -41,5 +41,5 @@ void APyramid::setSettings(const Settings& settings)
         Gy = Gy1 * Gy2;
     }
 
-    std::cout << "kernel size: " << Gx.cols << " x " << Gx.rows << std::endl;
+    //std::cout << "kernel size: " << Gx.cols << " x " << Gx.rows << std::endl;
 }
